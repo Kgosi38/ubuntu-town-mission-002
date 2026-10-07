@@ -46,3 +46,4 @@ export interface SkillFilters {
   kind?: SkillKind;
   query?: string;
 }
+export const broken: number = "oops";
