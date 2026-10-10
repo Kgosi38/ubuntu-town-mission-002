@@ -31,8 +31,10 @@ for insert
 to authenticated
 with check (auth.uid() = owner_id);
 
+create index on public.skills (owner_id);
 create policy "owners can update their own skill"
 on public.skills
 for update
 to authenticated
 using (auth.uid() = owner_id)
+with check (auth.uid() = owner_id);
