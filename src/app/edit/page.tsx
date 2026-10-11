@@ -15,9 +15,11 @@ function EditInner() {
   const router = useRouter();
   const [initial, setInitial] = useState<SkillInput | null>(null);
   const [error, setError] = useState("");
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     if (Number.isNaN(id) || !user) return;
+    setError(""); // clear the old error so a retry shows the loading state
     (async () => {
       try {
         const s = await fetchSkill(id);
@@ -31,12 +33,12 @@ function EditInner() {
         setError(e instanceof Error ? e.message : "Could not load this listing.");
       }
     })();
-  }, [id, user]);
+  }, [id, user, attempt]);
 
   if (loading) return <LoadingState />;
   if (!user) return <ErrorState message="Sign in to edit your listing." />;
   if (Number.isNaN(id)) return <ErrorState message="No listing selected." />;
-  if (error) return <ErrorState message={error} />;
+  if (error) return <ErrorState message={error} onRetry={() => setAttempt((n) => n + 1)} />;
   if (!initial) return <LoadingState />;
 
   return (
